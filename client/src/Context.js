@@ -4,13 +4,14 @@ import Peer from 'simple-peer';
 
 const SocketContext = createContext();
 
-// const socket = io('http://localhost:5000');
-const socket = io('https://warm-wildwood-81069.herokuapp.com');
+const socket = io('http://localhost:5000');
+// const socket = io('https://warm-wildwood-81069.herokuapp.com');
 
 const ContextProvider = ({ children }) => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [callEnded, setCallEnded] = useState(false);
   const [stream, setStream] = useState();
+  const [messages, setMessages] = useState([]);
   const [name, setName] = useState('');
   const [call, setCall] = useState({});
   const [me, setMe] = useState('');
@@ -29,12 +30,24 @@ const ContextProvider = ({ children }) => {
 
     socket.on('me', (id) => setMe(id));
 
+    socket.on('message', (data) => {
+      console.log( "message arrivée !" )
+      console.log( data.datas );
+      setMessages(data.datas)
+     } );  
+    
     socket.on('callUser', ({ from, name: callerName, signal }) => {
       setCall({ isReceivingCall: true, from, name: callerName, signal });
     });
   }, []);
 
-  const answerCall = () => {
+  const sendMess = (txt) =>
+  {
+    socket.send(txt);
+  }
+
+  const answerCall = () =>
+  {
     setCallAccepted(true);
 
     const peer = new Peer({ initiator: false, trickle: false, stream });
@@ -94,6 +107,8 @@ const ContextProvider = ({ children }) => {
       callUser,
       leaveCall,
       answerCall,
+      messages,
+      sendMess
     }}
     >
       {children}

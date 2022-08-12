@@ -17,13 +17,23 @@ app.get('/', (req, res) => {
 	res.send('Running');
 });
 
-io.on("connection", (socket) => {
+io.on( "connection", ( socket ) =>
+{
+	
+	let datas = []
 	socket.emit("me", socket.id);
 
 	socket.on("disconnect", () => {
 		socket.broadcast.emit("callEnded")
 	});
 
+	socket.on( 'message', function ( data )
+	{
+		datas.push( { txt: data, date: new Date() } )
+		io.sockets.emit( 'message', { datas } );
+	} );
+	
+	
 	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
 		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
 	});
