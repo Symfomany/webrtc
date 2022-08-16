@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Grid, Typography, Paper, makeStyles, Box, Button, Card, CardContent, CardMedia, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
+import { Grid, Typography, Paper, makeStyles, Box, Button, Card, CardContent, CardMedia, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, BottomNavigation, BottomNavigationAction, Container } from '@material-ui/core';
 
 import { SocketContext } from '../Context';
 import Sidebar from './Sidebar';
 import Notifications from './Notifications';
 import {  Phone, Restore, Favorite,LocationCity } from '@material-ui/icons';
+import { ContextProvider } from '../Context';
 
 const useStyles = makeStyles((theme) => ({
   video: {
@@ -32,13 +33,15 @@ const VideoPlayer = () => {
   const { name, callAccepted, myVideo, userVideo, callEnded, stream, call } = useContext(SocketContext);
   const classes = useStyles();
   const [callAccept, setCallAccept] = useState(false);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false); // Todo true 
 
   return (
-    <>
-    <Box sx={{ p: 1, mb: 20 }}>
-      <Button startIcon={<Phone />} onClick={() => setCallAccept(true)}  color="secondary" variant="contained">Je commence à tchater</Button>
-    </Box>
+  <ContextProvider>
+    
+    <Container container>
+      <Box flexDirection="row" alignItems="center" justifyContent="center" sx={{ p: 3, mb: 20 }}>
+        <Button size="large" startIcon={<Phone />} onClick={() => setCallAccept(true)}  color="secondary" variant="contained">Je commence à tchater</Button>
+      </Box>
     
     <Dialog
       open={open}
@@ -94,7 +97,8 @@ const VideoPlayer = () => {
           <BottomNavigationAction label="Favorites" icon={<Favorite />} />
           <BottomNavigationAction label="Nearby" icon={<LocationCity />} />
         </BottomNavigation>
-      </>
+      </Container>
+      </ContextProvider>
   );
 };
 

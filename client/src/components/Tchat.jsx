@@ -25,7 +25,10 @@ const Tchat = () => {
   const handleMess = () =>
   {
     sendMess( txt );
-    setTxt( '' ) 
+    setTxt( '' )
+    
+
+    
   }
   
   return (
@@ -34,8 +37,8 @@ const Tchat = () => {
         <Paper sx={{ margin: 10 }}>
             {messages && messages.map( ( item,i ) =>  <Box key={ i }>{item.txt} <br /> {item.date}</Box> )}
         </Paper>
-        <TextField value={txt} onChange={(e) => setTxt(e.target.value)} placeholder='Ecrivez du text'></TextField>
-        <Button variant="contained" color="primary" onClick={() => { handleMess()}}>Régir !</Button>
+        <TextField value={txt} onChange={(e) => setTxt(e.target.vaTextFieldlue)} placeholder='Ecrivez du text'></TextField>
+        <Button variant="contained" color="primary" onClick={() =>  handleMess()}>Régir !</Button>
     </div>
       </>
   );
